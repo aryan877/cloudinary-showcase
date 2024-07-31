@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
 import { Eye, EyeOff, Mail } from "lucide-react";
+import { useNotificationStore } from "@/store/notificationStore";
 
 const signUpSchema = z
   .object({
@@ -34,6 +35,9 @@ export default function SignUpForm() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const { signUp, isLoaded } = useSignUp();
+  const addNotification = useNotificationStore(
+    (state) => state.addNotification
+  );
 
   const router = useRouter();
 
@@ -68,9 +72,13 @@ export default function SignUpForm() {
       });
 
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      addNotification(
+        "success",
+        "Sign up successful. Please check your email for verification."
+      );
       setVerifying(true);
     } catch (error) {
-      alert(`Sign up failed: ${error}`);
+      addNotification("error", `Sign up failed: ${error}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -87,12 +95,13 @@ export default function SignUpForm() {
       });
 
       if (completeSignUp.status === "complete") {
+        addNotification("success", "Email verified successfully. Welcome!");
         router.push("/dashboard");
       } else {
-        alert("Verification failed. Please try again.");
+        addNotification("error", "Verification failed. Please try again.");
       }
     } catch (error) {
-      alert(`Verification failed: ${error}`);
+      addNotification("error", `Verification failed: ${error}`);
     }
   };
 

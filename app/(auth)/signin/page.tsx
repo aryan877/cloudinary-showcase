@@ -7,6 +7,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { Eye, EyeOff, Mail } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
+import { useNotificationStore } from "@/store/notificationStore";
 
 const signInSchema = z.object({
   identifier: z.string().min(1, "Email/Username is required"),
@@ -16,6 +17,9 @@ const signInSchema = z.object({
 export default function LogInForm() {
   const router = useRouter();
   const { signIn, isLoaded } = useSignIn();
+  const addNotification = useNotificationStore(
+    (state) => state.addNotification
+  );
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
@@ -56,14 +60,13 @@ export default function LogInForm() {
       });
 
       if (result.status === "complete") {
+        addNotification("success", "Signed in successfully");
         router.push("/dashboard");
       } else {
-        console.error("Sign-in incomplete:", result);
-        alert("Sign-in incomplete. Please try again.");
+        addNotification("error", "Sign-in incomplete. Please try again.");
       }
     } catch (error) {
-      console.error("Sign-in error:", error);
-      alert(`Sign-in error: ${error}`);
+      addNotification("error", `Sign-in error: ${error}`);
     }
   };
 
@@ -77,8 +80,7 @@ export default function LogInForm() {
         redirectUrlComplete: "/dashboard",
       });
     } catch (error) {
-      console.error("Google sign-in error:", error);
-      alert(`Google sign-in error: ${error}`);
+      addNotification("error", `Google sign-in error: ${error}`);
     }
   };
 
