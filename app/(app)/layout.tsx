@@ -8,14 +8,14 @@ import {
   LogOutIcon,
   MenuIcon,
   LayoutDashboardIcon,
-  ShareIcon,
+  Share2Icon,
   UploadIcon,
   ImageIcon,
 } from "lucide-react";
 
 const sidebarItems = [
   { href: "/home", icon: LayoutDashboardIcon, label: "Home Page" },
-  { href: "/social-share", icon: ShareIcon, label: "Social Share" },
+  { href: "/social-share", icon: Share2Icon, label: "Social Share" },
   { href: "/video-upload", icon: UploadIcon, label: "Video Upload" },
 ];
 
