@@ -96,7 +96,7 @@ export default function SignUpForm() {
 
       if (completeSignUp.status === "complete") {
         addNotification("success", "Email verified successfully. Welcome!");
-        router.push("/dashboard");
+        router.push("/home");
       } else {
         addNotification("error", "Verification failed. Please try again.");
       }

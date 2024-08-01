@@ -61,7 +61,7 @@ export default function LogInForm() {
 
       if (result.status === "complete") {
         addNotification("success", "Signed in successfully");
-        router.push("/dashboard");
+        router.push("/home");
       } else {
         addNotification("error", "Sign-in incomplete. Please try again.");
       }
@@ -77,7 +77,7 @@ export default function LogInForm() {
       await signIn.authenticateWithRedirect({
         strategy: "oauth_google",
         redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/dashboard",
+        redirectUrlComplete: "/home",
       });
     } catch (error) {
       addNotification("error", `Google sign-in error: ${error}`);

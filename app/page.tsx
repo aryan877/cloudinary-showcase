@@ -20,7 +20,7 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
   );
 }
 
-function Home() {
+function LandingPage() {
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content text-center">
@@ -57,8 +57,8 @@ function Home() {
               description="One-click AI enhancements for your media"
             />
           </div>
-          <Link href="/sign-in" className="btn btn-primary btn-lg">
-            Get Started
+          <Link href="/home" className="btn btn-primary btn-lg">
+            Go to Home Page
           </Link>
         </div>
       </div>
@@ -66,4 +66,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default LandingPage;

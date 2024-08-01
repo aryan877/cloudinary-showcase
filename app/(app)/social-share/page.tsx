@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { CldImage } from "next-cloudinary";
 
 const socialFormats = {
@@ -25,8 +25,6 @@ export default function SocialShareImagePage() {
   useEffect(() => {
     if (uploadedImage) {
       setIsTransforming(true);
-      const timer = setTimeout(() => setIsTransforming(false), 1000);
-      return () => clearTimeout(timer);
     }
   }, [selectedFormat, uploadedImage]);
 
@@ -146,6 +144,7 @@ export default function SocialShareImagePage() {
                     aspectRatio={socialFormats[selectedFormat].aspectRatio}
                     gravity="auto"
                     ref={imageRef}
+                    onLoad={() => setIsTransforming(false)}
                   />
                 </div>
               </div>
