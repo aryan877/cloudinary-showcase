@@ -86,7 +86,7 @@ export default function SocialShareImagePage() {
         Social Media Image Creator
       </h1>
 
-      <div className="card shadow-xl">
+      <div className="card">
         <div className="card-body">
           <h2 className="card-title mb-4">Upload an Image</h2>
           <div className="form-control">
