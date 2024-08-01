@@ -19,6 +19,15 @@ interface CloudinaryUploadResult {
 
 export async function POST(request: NextRequest) {
   try {
+    if (
+      !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ||
+      !process.env.CLOUDINARY_API_KEY ||
+      !process.env.CLOUDINARY_API_SECRET ||
+      !process.env.DATABASE_URL
+    ) {
+      throw new Error("Missing environment variables for Cloudinary or Prisma");
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     const title = formData.get("title") as string;
@@ -55,7 +64,7 @@ export async function POST(request: NextRequest) {
         title,
         description,
         publicId: result.public_id,
-        originalSize: String(parseInt(originalSize)),
+        originalSize: originalSize,
         compressedSize: String(result.bytes),
         duration: result.duration || 0,
       },
@@ -68,5 +77,7 @@ export async function POST(request: NextRequest) {
       { error: "Error uploading to Cloudinary" },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }

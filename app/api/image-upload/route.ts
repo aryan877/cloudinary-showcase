@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { auth } from "@clerk/nextjs/server";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -10,6 +13,8 @@ cloudinary.config({
 
 interface CloudinaryUploadResult {
   public_id: string;
+  bytes: number;
+  duration?: number;
   [key: string]: any;
 }
 
@@ -23,6 +28,9 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const originalSize = formData.get("originalSize") as string;
 
     if (!file) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
@@ -45,6 +53,17 @@ export async function POST(request: NextRequest) {
       }
     );
 
+    const video = await prisma.video.create({
+      data: {
+        title,
+        description,
+        publicId: result.public_id,
+        originalSize: String(parseInt(originalSize)),
+        compressedSize: String(result.bytes),
+        duration: result.duration || 0,
+      },
+    });
+
     return NextResponse.json({ publicId: result.public_id });
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
@@ -52,5 +71,7 @@ export async function POST(request: NextRequest) {
       { error: "Error uploading to Cloudinary" },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }

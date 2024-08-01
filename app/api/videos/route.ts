@@ -16,5 +16,7 @@ export async function GET(request: NextRequest) {
       { error: "Error fetching videos" },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }
