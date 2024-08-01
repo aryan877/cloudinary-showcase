@@ -124,15 +124,17 @@ export default function AppLayout({
               </li>
             ))}
           </ul>
-          <div className="p-4">
-            <button
-              onClick={handleSignOut}
-              className="btn btn-outline btn-error w-full"
-            >
-              <LogOutIcon className="mr-2 h-5 w-5" />
-              Sign Out
-            </button>
-          </div>
+          {user && (
+            <div className="p-4">
+              <button
+                onClick={handleSignOut}
+                className="btn btn-outline btn-error w-full"
+              >
+                <LogOutIcon className="mr-2 h-5 w-5" />
+                Sign Out
+              </button>
+            </div>
+          )}
         </aside>
       </div>
     </div>
